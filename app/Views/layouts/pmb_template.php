@@ -457,6 +457,20 @@
 
         gtag('config', 'UA-23581568-13');
     </script>
+    <?php if (isset($message)) : ?>
+        <?php dd('ok') ?>
+    <?php endif; ?>
+    <script>
+        $(document).ready(function() {
+            <?php if (session()->getFlashdata('validation') || session()->getFlashdata('message')) : ?>
+                $('.md-modal').addClass('md-show');
+                // document.querySelector('.ubah-password').onclick = function() {
+                //     swal("PASSWORD BERHASIL DI UBAH!", "klik OK untuk Kembali", "success");
+                // };
+            <?php endif; ?>
+        });
+    </script>
 </body>
+
 
 </html>

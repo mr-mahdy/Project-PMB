@@ -29,6 +29,7 @@ class BaseController extends Controller
 	 */
 	protected $helpers = [];
 
+
 	/**
 	 * Constructor.
 	 *
@@ -45,5 +46,7 @@ class BaseController extends Controller
 		// Preload any models, libraries, etc, here.
 		//--------------------------------------------------------------------
 		session();
+		helper('cookie');
+		$client = new \GuzzleHttp\Client();
 	}
 }

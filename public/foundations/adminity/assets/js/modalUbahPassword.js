@@ -2,9 +2,9 @@
 $(document).ready(function () {
 //Basic alert
 
-	document.querySelector('.ubah-password').onclick = function(){
-		swal("PASSWORD BERHASIL DI UBAH!", "klik OK untuk Kembali", "success");
-	};
+	// document.querySelector('.ubah-password').onclick = function(){
+	// 	swal("PASSWORD BERHASIL DI UBAH!", "klik OK untuk Kembali", "success");
+	// };
 
 
 

@@ -1,6 +1,11 @@
 <?= $this->extend('layouts/pmb_template'); ?>
 
 <?= $this->section('content'); ?>
+<?php if (isset($validation)) : ?>
+    <h1>
+        <?= 'ok' ?>
+    </h1>
+<?php endif; ?>
 <div class="main-body">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12">
@@ -785,6 +790,11 @@
                     <div class="md-content">
 
                         <h3 class="text-center" style="background: #01a9ac;"><i class="fa fa-refresh"></i> UBAH PASSWORD</h3>
+                        <div class="row">
+                            <?php if (session()->getFlashData('message')) : ?>
+                                <div class="alert alert-danger">Pesan : <?= session()->getFlashData('message') ?></div>
+                            <?php endif; ?>
+                        </div>
 
                         <div class="row m-b-20">
 
@@ -794,302 +804,313 @@
                             </div>
 
                             <div class="col-sm-12 col-lg-8">
-
-                                <div class="form-group form-primary">
-                                    <input type="password" name="password" class="form-control" required="" id="inputPasswordLama" placeholder="Masukkan Password Lama...">
-                                    <span class="form-bar"></span>
-                                </div>
-
-                                <div class="form-group form-primary">
-                                    <input type="password" name="password" class="form-control" required="" id="inputPasswordBaru" placeholder="Masukkan Password Baru...">
-                                    <span class="form-bar"></span>
-                                </div>
-
-                                <div class="form-group form-primary">
-                                    <input type="password" name="password" class="form-control" required="" id="konfirmasiPassword" placeholder="Konfirmasi Password Baru...">
-                                    <span class="form-bar"></span>
-                                </div>
-
-                                <div class="row m-t-25 text-left">
-                                    <div class="col-12">
-                                        <div class="checkbox-fade fade-in-primary">
-                                            <label>
-                                                <input type="checkbox" value="" onclick="myFunctionUbahPassword()">
-                                                <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
-                                                <span class="text-inverse">Tampilkan Password</span>
-                                            </label>
+                                <form action="/pmb/change-password" method="post">
+                                    <?= csrf_field(); ?>
+                                    <div class="form-group form-primary">
+                                        <input type="password" name="current_password" class="form-control <?= ($validation->hasError('current_password')) ? 'is-invalid' : ''; ?>" id="inputPasswordLama" placeholder="Masukkan Password Lama...">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('current_password'); ?>
                                         </div>
+                                        <span class="form-bar"></span>
                                     </div>
-                                </div>
 
-                                <div class="row m-t-30">
-                                    <div class="col-md-12">
-
-                                        <button type="button" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20 ubah-password" data-dismiss="md-modal" aria-label="Close" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'ubah-password']);">
-                                            <h5>UBAH PASSWORD</h5>
-                                        </button>
-
-                                        <button type="button" class="btn btn-secondary mobtn btn-md btn-block waves-effect text-center m-b-20 md-close">
-                                            <h5>KEMBALI</h5>
-                                        </button>
-
+                                    <div class="form-group form-primary">
+                                        <input type="password" name="new_password" class="form-control <?= ($validation->hasError('new_password')) ? 'is-invalid' : ''; ?>" id="inputPasswordBaru" placeholder="Masukkan Password Baru...">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('new_password'); ?>
+                                        </div>
+                                        <span class="form-bar"></span>
                                     </div>
-                                </div>
 
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- End Modal Ubah Password -->
-                <div class="md-overlay"></div>
-                <!-- Material tab card end -->
-
-                <!-- Model PMB ONLINE (CARA PENDAFTARAN) -->
-                <div class="modal fade" id="pmbOnline-caraPendaftaran" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="panel-heading bg-primary" style="margin-bottom: 0px;">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true"><i class="fa fa-times"></i></span>
-                                </button>
-                                <h5 style="text-align: center;"><i class="fa fa-map"></i> PETUNJUK CARA PENDAFTARAN ONLINE</h5>
-                            </div>
-
-                            <div id="accordion" role="tablist" aria-multiselectable="true">
-                                <div class="accordion-panel">
-                                    <div class="accordion-heading" role="tab" id="headingOne">
-                                        <h3 class="card-title accordion-title">
-                                            <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#pendaftaranFakultas" aria-expanded="false" aria-controls="pendaftaranFakultas">
-                                                <i class="fa fa-caret-right"></i> PETUNJUK PENDAFTARAN UNTUK SELAIN FAKULTAS KEDOKTERAN
-                                            </a>
-                                        </h3>
+                                    <div class="form-group form-primary">
+                                        <input type="password" name="password_confirmation" class="form-control <?= ($validation->hasError('password_confirmation')) ? 'is-invalid' : ''; ?>" id="konfirmasiPassword" placeholder="Konfirmasi Password Baru...">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('password_confirmation'); ?>
+                                        </div>
+                                        <span class="form-bar"></span>
                                     </div>
-                                    <div id="pendaftaranFakultas" class="panel-collapse in collapse" role="tabpanel" aria-labelledby="headingOne" style="">
-                                        <div class="accordion-content accordion-desc">
-                                            <div class="table-responsive">
-                                                <table class="table m-0">
-                                                    <tbody>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                1. REGISTRASI AKUN PMB ONLINE | (<span style="color: #F30606;"> PERIODE 20 JANUARI sd 24 APRIL 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2021/02/Tata-Cara-Pendaftaran.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN PENDAFTARAN AKUN PMB ONLINE</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                2. UJIAN SARINGAN MASUK (USM) UNPAS | (<span style="color: #F30606;"> 25 APRIL 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/04/USM-ONLINE.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN USM ONLINE</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                3. PENGUMUMAN KELULUSAN | (<span style="color: #F30606;"> 26 APRIL 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2018/05/Cara-Cetak-Tanda-Lulus-Mahasiswa.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN CEK HASIL DAN CETAK TANDA LULUS</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                4. REGISTRASI ULANG CALON MAHASISWA UNPAS | (<span style="color: #F30606;"> PERIODE 26 APRIL sd 3 JULI 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/08/Tata-Cara-Upload-Dokumen-pendukung-Registrasi-Ulang.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN REGISTRASI ULANG</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                5. REGISTRASI PKKMB UNPAS | (<span style="color: #F30606;"> PERIODE 26 APRIL sd 3 JULI 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/09/Panduan-Update-Data-untuk-Pelaporan-PD-Dikti-3.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN UPDATE DATA UNTUK PELAPORAN PDDIKTI</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+
+                                    <div class="row m-t-25 text-left">
+                                        <div class="col-12">
+                                            <div class="checkbox-fade fade-in-primary">
+                                                <label>
+                                                    <input type="checkbox" value="" onclick="myFunctionUbahPassword()">
+                                                    <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                                    <span class="text-inverse">Tampilkan Password</span>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="accordion-panel">
-                                    <div class="accordion-heading" role="tab" id="headingTwo">
-                                        <h3 class="card-title accordion-title">
-                                            <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#pendaftaranFakultasKedokteran" aria-expanded="false" aria-controls="pendaftaranFakultasKedokteran">
-                                                <i class="fa fa-caret-right"></i> PETUNJUK PENDAFTARAN UNTUK FAKULTAS KEDOKTERAN
-                                            </a>
-                                        </h3>
-                                    </div>
-                                    <div id="pendaftaranFakultasKedokteran" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" style="">
-                                        <div class="accordion-content accordion-desc">
-                                            <div class="table-responsive">
-                                                <table class="table m-0">
-                                                    <tbody>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                1. REGISTRASI AKUN PMB ONLINE | (<span style="color: #F30606;"> PERIODE 20 JANUARI sd 24 APRIL 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2021/02/Tata-Cara-Pendaftaran.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN PENDAFTARAN AKUN PMB ONLINE</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                2. UJIAN TAMBAHAN KHUSUS FAKULTAS KEDOKTERAN | (<span style="color: #F30606;"> PERIODE 20 JANUARI sd 24 APRIL 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2021/01/Ketentuan-Khusus-Kedokteran.jpg" target="_blank" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">KETENTUAN UJIAN TAMBAHAN KHUSUS FAKULTAS KEDOKTERAN</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                3. UJIAN SARINGAN MASUK (USM) UNPAS | (<span style="color: #F30606;"> 25 APRIL 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/04/USM-ONLINE.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN USM ONLINE</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                3. PENGUMUMAN KELULUSAN | (<span style="color: #F30606;"> 26 APRIL 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2018/05/Cara-Cetak-Tanda-Lulus-Mahasiswa.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN CEK HASIL DAN CETAK TANDA LULUS</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                5. REGISTRASI ULANG CALON MAHASISWA UNPAS | (<span style="color: #F30606;"> PERIODE 26 APRIL sd 3 JULI 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/08/Tata-Cara-Upload-Dokumen-pendukung-Registrasi-Ulang.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN REGISTRASI ULANG</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">
-                                                                6. REGISTRASI PKKMB UNPAS | (<span style="color: #F30606;"> PERIODE 26 APRIL sd 3 JULI 2021 </span>)
-                                                                <br>
-                                                                <br>
-                                                                <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/09/Panduan-Update-Data-untuk-Pelaporan-PD-Dikti-3.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN UPDATE DATA UNTUK PELAPORAN PDDIKTI</a>
-                                                            </th>
-                                                            <td></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Modal PMB ONLINE (CARA PENDAFTARAN) -->
 
-                <!-- start Modal PMB ONLINE (PENDAFTARAN ONLINE) -->
-                <div class="modal fade" id="pmbOnline-pendaftaranOnline" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="panel-heading bg-primary" style="margin-bottom: 0px;">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true"><i class="fa fa-times"></i></span>
-                                </button>
-                                <h5 style="text-align: center;"><i class="fa fa-pencil-square"></i> PENDAFTARAN ONLINE PMB UNPAS</h5>
-                            </div>
+                                    <div class="row m-t-30">
+                                        <div class="col-md-12">
 
-                            <div class="modal-body">
-
-                                <form>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Periode</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="20211 - PMB 2021/2022 Gelombang I" readonly="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Jenis Formulir</label>
-                                        <div class="col-sm-9">
-                                            <select name="select" class="form-control">
-                                                <option value="opt1">PILIH SALAH SATU</option>
-                                                <option value="opt2">Type 2</option>
-                                                <option value="opt3">Type 3</option>
-                                                <option value="opt4">Type 4</option>
-                                                <option value="opt5">Type 5</option>
-                                                <option value="opt6">Type 6</option>
-                                                <option value="opt7">Type 7</option>
-                                                <option value="opt8">Type 8</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Nama</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="Masukkan Nama...">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Aalamat</label>
-                                        <div class="col-sm-9">
-                                            <textarea rows="5" cols="5" class="form-control" placeholder="Masukkan Alamat.."></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Nomor HP/Whatsapp</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="Masukkan Nama...">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Tanggal Lahir</label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control" type="date">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Nama Ibu Kandung</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="Masukkan Nama Ibu Kandung...">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Kode Verifikasi</label>
-                                        <div class="col-sm-9">
-                                            <!-- masukan captcha disini -->
-                                            <!-- <input type="text" class="form-control" placeholder="Masukkan Nama Ibu Kandung..."> -->
-                                        </div>
-                                    </div>
+                                            <button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20 ubah-password" data-dismiss="md-modal" aria-label="Close">
+                                                <h5>UBAH PASSWORD</h5>
+                                            </button>
                                 </form>
 
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">BATAL</button>
-                                    <button type="button" class="btn btn-primary waves-effect waves-light simpan-komponenUSM" data-dismiss="modal" aria-label="Close" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'simpan-komponenUSM']);">DAFTAR</button>
-                                </div>
-                            </div>
+                                <button type="button" class="btn btn-secondary mobtn btn-md btn-block waves-effect text-center m-b-20 md-close">
+                                    <h5>KEMBALI</h5>
+                                </button>
 
+                            </div>
                         </div>
+
                     </div>
                 </div>
-                <!-- end Modal PMB ONLINE (PENDAFTARAN ONLINE) -->
-
 
             </div>
         </div>
+        <!-- End Modal Ubah Password -->
+        <div class="md-overlay"></div>
+        <!-- Material tab card end -->
 
-        <!-- Main-body end -->
+        <!-- Model PMB ONLINE (CARA PENDAFTARAN) -->
+        <div class="modal fade" id="pmbOnline-caraPendaftaran" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="panel-heading bg-primary" style="margin-bottom: 0px;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                        </button>
+                        <h5 style="text-align: center;"><i class="fa fa-map"></i> PETUNJUK CARA PENDAFTARAN ONLINE</h5>
+                    </div>
+
+                    <div id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="accordion-panel">
+                            <div class="accordion-heading" role="tab" id="headingOne">
+                                <h3 class="card-title accordion-title">
+                                    <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#pendaftaranFakultas" aria-expanded="false" aria-controls="pendaftaranFakultas">
+                                        <i class="fa fa-caret-right"></i> PETUNJUK PENDAFTARAN UNTUK SELAIN FAKULTAS KEDOKTERAN
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="pendaftaranFakultas" class="panel-collapse in collapse" role="tabpanel" aria-labelledby="headingOne" style="">
+                                <div class="accordion-content accordion-desc">
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">
+                                                        1. REGISTRASI AKUN PMB ONLINE | (<span style="color: #F30606;"> PERIODE 20 JANUARI sd 24 APRIL 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2021/02/Tata-Cara-Pendaftaran.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN PENDAFTARAN AKUN PMB ONLINE</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        2. UJIAN SARINGAN MASUK (USM) UNPAS | (<span style="color: #F30606;"> 25 APRIL 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/04/USM-ONLINE.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN USM ONLINE</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        3. PENGUMUMAN KELULUSAN | (<span style="color: #F30606;"> 26 APRIL 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2018/05/Cara-Cetak-Tanda-Lulus-Mahasiswa.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN CEK HASIL DAN CETAK TANDA LULUS</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        4. REGISTRASI ULANG CALON MAHASISWA UNPAS | (<span style="color: #F30606;"> PERIODE 26 APRIL sd 3 JULI 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/08/Tata-Cara-Upload-Dokumen-pendukung-Registrasi-Ulang.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN REGISTRASI ULANG</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        5. REGISTRASI PKKMB UNPAS | (<span style="color: #F30606;"> PERIODE 26 APRIL sd 3 JULI 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/09/Panduan-Update-Data-untuk-Pelaporan-PD-Dikti-3.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN UPDATE DATA UNTUK PELAPORAN PDDIKTI</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-panel">
+                            <div class="accordion-heading" role="tab" id="headingTwo">
+                                <h3 class="card-title accordion-title">
+                                    <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#pendaftaranFakultasKedokteran" aria-expanded="false" aria-controls="pendaftaranFakultasKedokteran">
+                                        <i class="fa fa-caret-right"></i> PETUNJUK PENDAFTARAN UNTUK FAKULTAS KEDOKTERAN
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="pendaftaranFakultasKedokteran" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" style="">
+                                <div class="accordion-content accordion-desc">
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">
+                                                        1. REGISTRASI AKUN PMB ONLINE | (<span style="color: #F30606;"> PERIODE 20 JANUARI sd 24 APRIL 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2021/02/Tata-Cara-Pendaftaran.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN PENDAFTARAN AKUN PMB ONLINE</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        2. UJIAN TAMBAHAN KHUSUS FAKULTAS KEDOKTERAN | (<span style="color: #F30606;"> PERIODE 20 JANUARI sd 24 APRIL 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2021/01/Ketentuan-Khusus-Kedokteran.jpg" target="_blank" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">KETENTUAN UJIAN TAMBAHAN KHUSUS FAKULTAS KEDOKTERAN</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        3. UJIAN SARINGAN MASUK (USM) UNPAS | (<span style="color: #F30606;"> 25 APRIL 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/04/USM-ONLINE.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN USM ONLINE</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        3. PENGUMUMAN KELULUSAN | (<span style="color: #F30606;"> 26 APRIL 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2018/05/Cara-Cetak-Tanda-Lulus-Mahasiswa.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN CEK HASIL DAN CETAK TANDA LULUS</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        5. REGISTRASI ULANG CALON MAHASISWA UNPAS | (<span style="color: #F30606;"> PERIODE 26 APRIL sd 3 JULI 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/08/Tata-Cara-Upload-Dokumen-pendukung-Registrasi-Ulang.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN REGISTRASI ULANG</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        6. REGISTRASI PKKMB UNPAS | (<span style="color: #F30606;"> PERIODE 26 APRIL sd 3 JULI 2021 </span>)
+                                                        <br>
+                                                        <br>
+                                                        <a href="https://pmb.unpas.ac.id/wp-content/uploads/2020/09/Panduan-Update-Data-untuk-Pelaporan-PD-Dikti-3.pdf" type="button" class="btn btn-primary waves-effect waves-light jual-formulir" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'jual-formulir']);">DOWNLOAD PANDUAN UPDATE DATA UNTUK PELAPORAN PDDIKTI</a>
+                                                    </th>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Modal PMB ONLINE (CARA PENDAFTARAN) -->
+
+        <!-- start Modal PMB ONLINE (PENDAFTARAN ONLINE) -->
+        <div class="modal fade" id="pmbOnline-pendaftaranOnline" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="panel-heading bg-primary" style="margin-bottom: 0px;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                        </button>
+                        <h5 style="text-align: center;"><i class="fa fa-pencil-square"></i> PENDAFTARAN ONLINE PMB UNPAS</h5>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <form>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Periode</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="20211 - PMB 2021/2022 Gelombang I" readonly="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Jenis Formulir</label>
+                                <div class="col-sm-9">
+                                    <select name="select" class="form-control">
+                                        <option value="opt1">PILIH SALAH SATU</option>
+                                        <option value="opt2">Type 2</option>
+                                        <option value="opt3">Type 3</option>
+                                        <option value="opt4">Type 4</option>
+                                        <option value="opt5">Type 5</option>
+                                        <option value="opt6">Type 6</option>
+                                        <option value="opt7">Type 7</option>
+                                        <option value="opt8">Type 8</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Nama</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="Masukkan Nama...">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Aalamat</label>
+                                <div class="col-sm-9">
+                                    <textarea rows="5" cols="5" class="form-control" placeholder="Masukkan Alamat.."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Nomor HP/Whatsapp</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="Masukkan Nama...">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Tanggal Lahir</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="date">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Nama Ibu Kandung</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="Masukkan Nama Ibu Kandung...">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Kode Verifikasi</label>
+                                <div class="col-sm-9">
+                                    <!-- masukan captcha disini -->
+                                    <!-- <input type="text" class="form-control" placeholder="Masukkan Nama Ibu Kandung..."> -->
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">BATAL</button>
+                            <button type="button" class="btn btn-primary waves-effect waves-light simpan-komponenUSM" data-dismiss="modal" aria-label="Close" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'simpan-komponenUSM']);">DAFTAR</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end Modal PMB ONLINE (PENDAFTARAN ONLINE) -->
+
+
     </div>
+</div>
+
+<!-- Main-body end -->
+</div>
 </div>
 <?= $this->endSection(); ?>

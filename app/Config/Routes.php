@@ -33,6 +33,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Auth::index');
 $routes->post('/pmb/login', 'Auth::login');
+$routes->post('/pmb/change-password', 'Auth::changePassword');
 $routes->get('/pmb/logout', 'Auth::logout');
 $routes->get('/pmb', 'Home::index');
 $routes->get('/pmb/setup-pmb', 'Sidebar::setupPMB');

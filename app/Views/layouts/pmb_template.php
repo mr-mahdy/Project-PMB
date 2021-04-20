@@ -457,16 +457,13 @@
 
         gtag('config', 'UA-23581568-13');
     </script>
-    <?php if (isset($message)) : ?>
-        <?php dd('ok') ?>
-    <?php endif; ?>
     <script>
         $(document).ready(function() {
-            <?php if (session()->getFlashdata('validation') || session()->getFlashdata('message')) : ?>
+            <?php if (session()->getFlashdata('validation') || session()->getFlashdata('message') == 'Kata Sandi Berhasil Diperbarui') : ?>
+                swal("Kata Sandi Berhasil Diperbarui", "klik OK untuk Kembali", "success");
+            <?php elseif (session()->getFlashdata('message') == 'Kata sandi gagal diperbarui') : ?>
                 $('.md-modal').addClass('md-show');
-                // document.querySelector('.ubah-password').onclick = function() {
-                //     swal("PASSWORD BERHASIL DI UBAH!", "klik OK untuk Kembali", "success");
-                // };
+                swal("Kata Sandi Gagal Diperbarui", "klik OK untuk Kembali", "error");
             <?php endif; ?>
         });
     </script>

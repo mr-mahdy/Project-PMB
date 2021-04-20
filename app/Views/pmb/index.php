@@ -790,11 +790,6 @@
                     <div class="md-content">
 
                         <h3 class="text-center" style="background: #01a9ac;"><i class="fa fa-refresh"></i> UBAH PASSWORD</h3>
-                        <div class="row">
-                            <?php if (session()->getFlashData('message')) : ?>
-                                <div class="alert alert-danger">Pesan : <?= session()->getFlashData('message') ?></div>
-                            <?php endif; ?>
-                        </div>
 
                         <div class="row m-b-20">
 

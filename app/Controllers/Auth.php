@@ -69,16 +69,20 @@ class Auth extends BaseController
             'sandi' => $sandi
         );
 
-        $response = $this->client->post($url, [
-            'headers' => ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'token' => $responseClient->data->client->token],
-            'body'    => json_encode($data)
-        ]);
-        $responseUser = json_decode($response->getBody(), true);
         // Pengecekan login user situ
         try {
+            // Login Pengguna Situ
+            $response = $this->client->post($url, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'token' => $responseClient->data->client->token
+                ],
+                'body'    => json_encode($data)
+            ]);
+            $responseUser = json_decode($response->getBody(), true);
             session()->set('user', $responseUser);
             session()->set('token', $responseClient->data->client->token);
-            // Login Pengguna Situ
             return redirect()->to('/pmb');
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $response = $e->getResponse();
@@ -125,7 +129,6 @@ class Auth extends BaseController
             return redirect()->to('/pmb');
         }
         // Change Password User API
-        $url = 'https://prototipe.unpas.ac.id/situ/api/public/api-v1/user/change-password';
 
         $data = array(
             'current_password' => $this->request->getVar('current_password'),
@@ -134,6 +137,7 @@ class Auth extends BaseController
         );
 
         try {
+            $url = 'https://prototipe.unpas.ac.id/situ/api/public/api-v1/user/change-password';
             $response = $this->client->post($url, [
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -143,8 +147,7 @@ class Auth extends BaseController
                 ],
                 'body' => json_encode($data)
             ]);
-            $responseClient = json_decode($response->getBody(), true);
-            dd($responseClient);
+            $responseClient = json_decode($response->getBody());
             session()->setFlashData('message', $responseClient->message);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $response = $e->getResponse();
